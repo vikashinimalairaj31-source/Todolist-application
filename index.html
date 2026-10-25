@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TaskFlow - A modern, sleek personal task manager with full CRUD capabilities, sidebar navigation, and local storage." />
+  <title>TaskFlow &bull; Workspace</title>
+  
+  <!-- Favicon (SVG and Data URI Fallback) -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23000000'/%3E%3Cpolyline points='9 16 14 21 23 10' fill='none' stroke='%2338bdf8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  
+  <!-- Modern Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Simple Login View -->
+  <div id="login-view" class="login-view" style="display: none;">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-logo login-logo">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"></polyline>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <h1 class="login-title">TaskFlow</h1>
+        <p class="login-subtitle">Minimalist Personal Workspace</p>
+      </div>
+
+      <form id="login-form" autocomplete="off" class="login-form">
+        <div class="form-group">
+          <label for="username-input" class="login-label">What's your name?</label>
+          <div class="login-input-wrap">
+            <svg class="login-user-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input 
+              type="text" 
+              id="username-input" 
+              class="login-input" 
+              placeholder="Enter your name (e.g. Kavya)" 
+              required 
+              maxlength="30"
+              autofocus 
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary login-btn">
+          <span>Enter Workspace</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </form>
+
+      <div class="login-footer-hint">
+        <span>No password required &bull; Auto-saves locally</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Container with Sidebar Layout -->
+  <div id="app-layout" class="app-layout">
+    
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Left Sidebar Navigation -->
+    <aside id="app-sidebar" class="app-sidebar">
+      <!-- Sidebar Header / Brand -->
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"></polyline>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">TaskFlow</h1>
+          <span class="brand-badge">Workspace</span>
+        </div>
+
+        <!-- Audio & Theme Toggles at the Top of the Sidebar -->
+        <div class="sidebar-top-toggles">
+          <button id="audio-toggle-btn" class="icon-btn-sm" title="Toggle audio feedback" aria-label="Toggle completion sound">
+            <svg id="audio-on-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg id="audio-off-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+
+          <button id="theme-toggle-btn" class="icon-btn-sm" title="Toggle theme" aria-label="Toggle dark/light theme">
+            <svg id="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <button id="close-sidebar-btn" class="close-sidebar-btn" aria-label="Close sidebar">&times;</button>
+      </div>
+
+      <!-- Navigation Views (Filters) -->
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <div class="nav-group-title">TASKS</div>
+          <button class="nav-item filter-pill active" data-filter="all">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="nav-item-label">All Tasks</span>
+            <span class="badge" id="badge-all">0</span>
+          </button>
+
+          <button class="nav-item filter-pill" data-filter="active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span class="nav-item-label">In Progress</span>
+            <span class="badge" id="badge-active">0</span>
+          </button>
+
+          <button class="nav-item filter-pill" data-filter="completed">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span class="nav-item-label">Completed</span>
+            <span class="badge" id="badge-completed">0</span>
+          </button>
+
+          <button class="nav-item filter-pill" data-filter="starred">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span class="nav-item-label">Starred</span>
+            <span class="badge" id="badge-starred">0</span>
+          </button>
+        </div>
+
+        <!-- Categories / Projects Group -->
+        <div class="nav-group">
+          <div class="nav-group-title">CATEGORIES</div>
+          <button class="nav-item category-nav-item active" data-category="all">
+            <span class="category-bullet" style="background-color: #64748b;"></span>
+            <span class="nav-item-label">All Categories</span>
+          </button>
+          <button class="nav-item category-nav-item" data-category="Work">
+            <span class="category-bullet" style="background-color: #38bdf8;"></span>
+            <span class="nav-item-label">Work</span>
+          </button>
+          <button class="nav-item category-nav-item" data-category="Personal">
+            <span class="category-bullet" style="background-color: #10b981;"></span>
+            <span class="nav-item-label">Personal</span>
+          </button>
+          <button class="nav-item category-nav-item" data-category="Study">
+            <span class="category-bullet" style="background-color: #f59e0b;"></span>
+            <span class="nav-item-label">Study</span>
+          </button>
+          <button class="nav-item category-nav-item" data-category="Health">
+            <span class="category-bullet" style="background-color: #ef4444;"></span>
+            <span class="nav-item-label">Health</span>
+          </button>
+          <button class="nav-item category-nav-item" data-category="Finance">
+            <span class="category-bullet" style="background-color: #8b5cf6;"></span>
+            <span class="nav-item-label">Finance</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Sidebar Progress & Metrics Widget -->
+      <div class="sidebar-progress-widget">
+        <div class="progress-widget-header">
+          <div class="progress-title-wrap">
+            <span class="widget-subtitle">Completion</span>
+            <h3 class="widget-title" id="stats-greeting">Daily Progress</h3>
+          </div>
+          <div class="progress-ring-container">
+            <svg class="progress-ring" width="52" height="52">
+              <circle class="progress-ring__circle-bg" stroke-width="5" fill="transparent" r="21" cx="26" cy="26" />
+              <circle id="progress-circle" class="progress-ring__circle" stroke-width="5" stroke-linecap="round" fill="transparent" r="21" cx="26" cy="26" />
+            </svg>
+            <div class="progress-ring-label" id="progress-percent">0%</div>
+          </div>
+        </div>
+
+        <div class="stats-bar-track">
+          <div id="progress-bar-fill" class="stats-bar-fill" style="width: 0%;"></div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-num" id="metric-total">0</span>
+            <span class="metric-lbl">Total</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-num" id="metric-pending">0</span>
+            <span class="metric-lbl">Active</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-num" id="metric-completed">0</span>
+            <span class="metric-lbl">Done</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Utilities & Controls -->
+      <div class="sidebar-footer">
+        <div class="footer-backup-row">
+          <button id="export-json-btn" class="footer-btn" title="Export tasks JSON">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export
+          </button>
+          <label class="footer-btn import-label" title="Import tasks JSON">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Import
+            <input type="file" id="import-json-file" accept=".json" style="display:none;" />
+          </label>
+          <button id="clear-completed-btn" class="footer-btn text-danger" title="Purge completed tasks">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Purge
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Workspace Area -->
+    <main class="main-workspace">
+      <!-- Top Workspace Header -->
+      <header class="workspace-header">
+        <div class="header-left">
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open sidebar menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div>
+            <h2 id="view-title" class="workspace-view-title">All Tasks</h2>
+            <p class="workspace-date" id="current-date-display">Today</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Search Input -->
+          <div class="search-box">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="task-search-input" placeholder="Search tasks... (Press /)" autocomplete="off" />
+            <button id="clear-search-btn" class="clear-search-btn" title="Clear search" aria-label="Clear search" hidden>&times;</button>
+          </div>
+
+          <!-- Sort Selector -->
+          <div class="sort-box">
+            <label for="sort-select">Sort:</label>
+            <select id="sort-select">
+              <option value="createdAt-desc">Newest First</option>
+              <option value="createdAt-asc">Oldest First</option>
+              <option value="dueDate-asc">Due Date (Soonest)</option>
+              <option value="priority-desc">Priority (High to Low)</option>
+              <option value="alphabetical">Title (A-Z)</option>
+            </select>
+          </div>
+
+          <!-- Top-Right User Profile & Logout -->
+          <div class="header-user-profile">
+            <div class="user-avatar" id="user-avatar-initial">U</div>
+            <div class="user-details-header">
+              <span class="user-name" id="user-display-name">User</span>
+              <span class="user-role">Workspace Owner</span>
+            </div>
+            <button id="logout-btn" class="header-logout-btn" title="Log out / Switch user" aria-label="Log out">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
+
+          <!-- Hidden dropdown for sync compatibility -->
+          <select id="category-filter-select" style="display:none;">
+            <option value="all">All Categories</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Study">Study</option>
+            <option value="Health">Health</option>
+            <option value="Finance">Finance</option>
+          </select>
+        </div>
+      </header>
+
+      <!-- Workspace Body Content -->
+      <div class="workspace-content">
+        <!-- New Task Creation Card (CREATE) -->
+        <div class="create-task-card">
+          <form id="create-task-form" autocomplete="off">
+            <div class="input-primary-row">
+              <input 
+                type="text" 
+                id="task-title-input" 
+                class="main-task-input" 
+                placeholder="What needs to be done? (e.g., Prepare quarterly presentation)" 
+                required 
+                maxlength="140"
+              />
+              <button type="submit" id="add-task-submit-btn" class="btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Task</span>
+              </button>
+            </div>
+
+            <!-- Task Options Row -->
+            <div class="task-options-row">
+              <div class="option-field">
+                <label for="task-category-select">Category</label>
+                <select id="task-category-select">
+                  <option value="Work">💼 Work</option>
+                  <option value="Personal" selected>👤 Personal</option>
+                  <option value="Study">📚 Study</option>
+                  <option value="Health">🏃 Health</option>
+                  <option value="Finance">💰 Finance</option>
+                </select>
+              </div>
+
+              <div class="option-field">
+                <label for="task-priority-select">Priority</label>
+                <select id="task-priority-select">
+                  <option value="low">Low Priority</option>
+                  <option value="medium" selected>Medium Priority</option>
+                  <option value="high">High Priority</option>
+                  <option value="urgent">🔥 Urgent</option>
+                </select>
+              </div>
+
+              <div class="option-field">
+                <label for="task-due-date-input">Due Date</label>
+                <input type="date" id="task-due-date-input" class="date-picker-input" />
+              </div>
+
+              <div class="option-field full-width">
+                <label for="task-notes-input">Notes / Details (Optional)</label>
+                <textarea id="task-notes-input" rows="2" placeholder="Add additional context, references, or links..."></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Task List Container (READ, UPDATE, DELETE) -->
+        <div class="task-list-container">
+          <ul id="task-list" class="task-list" aria-live="polite">
+            <!-- Dynamic task items injected via app.js -->
+          </ul>
+
+          <!-- Empty State -->
+          <div id="empty-state" class="empty-state" style="display:none;">
+            <div class="empty-icon-wrap">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+              </svg>
+            </div>
+            <h3 class="empty-title">No tasks in this view</h3>
+            <p class="empty-description">Create a task above or switch your sidebar category to see tasks.</p>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+          <p>TaskFlow Workspace &bull; Pure HTML5, CSS3 &amp; Vanilla JavaScript &bull; LocalStorage Enabled</p>
+          <p class="shortcuts-hint"><kbd>/</kbd> to search &bull; <kbd>Esc</kbd> to close &bull; Auto-saves instantly</p>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <!-- Task Edit Modal (UPDATE) -->
+  <div id="edit-modal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <h2 class="modal-title">Edit Task</h2>
+        </div>
+        <button id="close-modal-btn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <form id="edit-task-form">
+        <input type="hidden" id="edit-task-id" />
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="edit-task-title">Task Title *</label>
+            <input type="text" id="edit-task-title" required maxlength="140" class="modal-input" />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="edit-task-category">Category</label>
+              <select id="edit-task-category" class="modal-input">
+                <option value="Work">💼 Work</option>
+                <option value="Personal">👤 Personal</option>
+                <option value="Study">📚 Study</option>
+                <option value="Health">🏃 Health</option>
+                <option value="Finance">💰 Finance</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-task-priority">Priority</label>
+              <select id="edit-task-priority" class="modal-input">
+                <option value="low">Low Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="high">High Priority</option>
+                <option value="urgent">🔥 Urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-task-due-date">Due Date</label>
+            <input type="date" id="edit-task-due-date" class="modal-input" />
+          </div>
+
+          <div class="form-group">
+            <label for="edit-task-notes">Notes</label>
+            <textarea id="edit-task-notes" rows="3" class="modal-input" placeholder="Additional details or checklist..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancel-edit-btn" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
